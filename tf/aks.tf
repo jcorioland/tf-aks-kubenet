@@ -11,7 +11,7 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "subnet" {
-  name                 = "internal"
+  name                 = "aksnodes"
   resource_group_name  = "${azurerm_resource_group.aks.name}"
   address_prefix       = "10.1.0.0/24"
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
@@ -49,6 +49,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
     network_profile {
         network_plugin = "${var.network_plugin}"
+    }
+
+    role_based_access_control {
+        enabled = true
     }
 
     tags {

@@ -3,7 +3,7 @@ variable "client_secret" {}
 
 
 variable "agent_count" {
-    default = 1
+    default = 2
 }
 
 variable "ssh_public_key" {
@@ -11,15 +11,15 @@ variable "ssh_public_key" {
 }
 
 variable "dns_prefix" {
-    default = "aksjco2"
+    default = "aksjco"
 }
 
 variable cluster_name {
-    default = "aksjco2"
+    default = "aksjco"
 }
 
 variable resource_group_name {
-    default = "aksjco2-rg"
+    default = "aksjco-rg"
 }
 
 variable location {
