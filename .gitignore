@@ -3,3 +3,4 @@
 *.plan
 *.tfstate
 *.tfstate.backup
+.output

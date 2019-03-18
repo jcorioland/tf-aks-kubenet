@@ -23,6 +23,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     location            = "${azurerm_resource_group.aks.location}"
     resource_group_name = "${azurerm_resource_group.aks.name}"
     dns_prefix          = "${var.dns_prefix}"
+    kubernetes_version  = "${var.kubernetes_version}"
 
     linux_profile {
         admin_username = "azureuser"
@@ -67,6 +68,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
             AKS_VNET_RG = "${var.resource_group_name}"
             AKS_VNET_NAME = "${azurerm_virtual_network.vnet.name}"
             AKS_SUBNET_NAME = "${azurerm_subnet.subnet.name}"
+        }
+    }
+
+    provisioner "local-exec" {
+        command = "./helm-install.sh"
+
+        environment {
+            AKS_NAME = "${var.cluster_name}"
+            AKS_RG   = "${var.resource_group_name}"
         }
     }
 

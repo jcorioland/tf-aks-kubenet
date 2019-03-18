@@ -29,3 +29,7 @@ variable location {
 variable network_plugin {
     default = "kubenet"
 }
+
+variable kubernetes_version {
+    default = "1.12.6"
+}
