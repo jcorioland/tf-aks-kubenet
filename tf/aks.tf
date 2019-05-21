@@ -61,17 +61,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
 
     provisioner "local-exec" {
-        command = "./config-network.sh"
-
-        environment {
-            AKS_RG = "${var.resource_group_name}"
-            AKS_VNET_RG = "${var.resource_group_name}"
-            AKS_VNET_NAME = "${azurerm_virtual_network.vnet.name}"
-            AKS_SUBNET_NAME = "${azurerm_subnet.subnet.name}"
-        }
-    }
-
-    provisioner "local-exec" {
         command = "./helm-install.sh"
 
         environment {
@@ -79,25 +68,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
             AKS_RG   = "${var.resource_group_name}"
         }
     }
-
-    provisioner "local-exec" {
-        when = "destroy"
-        command = "./clean-network.sh"
-        
-        environment {
-            AKS_VNET_RG = "${var.resource_group_name}"
-            AKS_VNET_NAME = "${azurerm_virtual_network.vnet.name}"
-            AKS_SUBNET_NAME = "${azurerm_subnet.subnet.name}"
-        }
-    }
 }
 
-data "azurerm_azuread_service_principal" "akssp" {
+data "azuread_service_principal" "akssp" {
   application_id = "${var.client_id}"
 }
 
 resource "azurerm_role_assignment" "netcontribrole" {
   scope                = "${azurerm_subnet.subnet.id}"
   role_definition_name = "Network Contributor"
-  principal_id         = "${data.azurerm_azuread_service_principal.akssp.object_id}"
+  principal_id         = "${data.azuread_service_principal.akssp.object_id}"
 }
